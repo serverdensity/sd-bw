@@ -92,8 +92,11 @@ def get_devices(devices):
 
 def read_config():
 	config = {}
-	with open('config.json', 'r') as f:
-		config = json.load(f)
+	try:
+		with open('config.json', 'r') as f:
+			config = json.load(f)
+	except IOError:
+		print "Error: There is no config.json file"
 	return config
 
 def modify_config(keydic):
