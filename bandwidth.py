@@ -34,23 +34,41 @@ def get_jsondata(urlpath, payload):
 
 
 def available_metrics(config):
-	try: 
-		api_response = requests.get('https://api.serverdensity.io/metrics/definitions/{0}'.format(config['current_device']),
-		    params={
+	payload = {
 		        'token': config['api_key'],
 		        'start' : config['start'],
 		        'end': config['end']
-		    })
-	except IndexError:
-		pass
+		    }
 
-	return json.loads(api_response.text)
+	api_response = get_jsondata('metrics/definitions/{0}'.format(config['current_device']), payload)
+
+	return api_response
+
+def bandwidth_response(config):
+	"""Get total_bandwidth for current device and current interface"""
+
+	filters = {
+    'networkTraffic': {
+        config['current_interface']: ['rxMByteS', 'txMByteS']
+    	}
+	}
+
+	payload = {
+	        'token': config['api_key'],
+	        'start' : config['start'],
+	        'end': config['end'],
+	        'filter': json.dumps(filters)
+	    }
+
+	api_response = get_jsondata('metrics/graphs/{0}'.format(config['current_device']), payload)
+
+	return api_response
 
 def available_devices(config):
-	api_response = requests.get('https://api.serverdensity.io/inventory/devices', params = {
-	        'token': config['api_key']
-	    })
-	return json.loads(api_response.text)
+	payload = {'token': config['api_key']}
+
+	api_response = get_jsondata('/inventory/devices', payload)
+	return api_response
 
 def get_network_interfaces(metrics):
 	"""Gives you a list of network adapters"""
@@ -99,24 +117,7 @@ def calculate_bandwidth(trafficdic):
 	return Bandwidth(rxgb, txgb)
 
 
-def bandwidth_response(config):
-	"""Get total_bandwidth for current device and current interface"""
-	config = read_config()
 
-	filters = {
-    'networkTraffic': {
-        config['current_interface']: ['rxMByteS', 'txMByteS']
-    	}
-	}
-
-	api_response = requests.get('https://api.serverdensity.io/metrics/graphs/{0}'.format(config['current_device']),
-    	params={
-	        'token': config['api_key'],
-	        'start' : config['start'],
-	        'end': config['end'],
-	        'filter': json.dumps(filters)
-	    })
-	return json.loads(api_response.text)
 
 
 config = read_config()
