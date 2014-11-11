@@ -1,6 +1,9 @@
-import requests
 import json
 from collections import namedtuple
+from urlparse import urljoin
+
+import requests
+
 
 # need to figure out error handling. 
 
