@@ -7,6 +7,32 @@ import requests
 
 # need to figure out error handling. 
 
+BASE_URL = 'https://api.serverdensity.io'
+CONFIG_PATH = '~/config.json'
+
+
+def parse_response(response):
+	try:
+		data = json.loads(response.text)
+	except ValueError:
+		data = {}
+
+	try:
+		if response.status == 200:
+			return data
+		elif not data:
+			data['message'] = 'Dictionary is empty'
+			raise Exception
+		elif response.status != 200:
+			raise Exception
+	except Exception:
+		print 'Error: {0}'.format(data['message'])
+
+def get_jsondata(urlpath, payload):
+	response = requests.get(urljoin(BASE_URL, urlpath), params=payload)
+	return parse_response(response)
+
+
 def available_metrics(config):
 	try: 
 		api_response = requests.get('https://api.serverdensity.io/metrics/definitions/{0}'.format(config['current_device']),
