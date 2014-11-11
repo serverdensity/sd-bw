@@ -57,14 +57,24 @@ def modify_config(keydic):
 		json.dump(config, fp)
 
 def calculate_bandwidth(trafficdic):
-	pass
+	rxmblist = trafficdic[0]['tree'][0]['tree'][0]['data']
+	txmblist = trafficdic[0]['tree'][0]['tree'][1]['data']
+
+	# There two definitions though
+	# http://en.wikipedia.org/wiki/Gigabyte#Definition
+
+	rxgb = sum([value['y'] for value in rxmblist])/1024
+	txgb = sum([value['y'] for value in txmblist])/1024
+	Bandwidth = namedtuple('Bandwidth', 'rxgb, txgb')
+
+	return Bandwidth(rxgb, txgb)
 
 
-def total_bandwidth(config):
+def bandwidth_response(config):
 	"""Get total_bandwidth for current device and current interface"""
 	config = read_config()
 
-	filter = {
+	filters = {
     'networkTraffic': {
         config['current_interface']: ['rxMByteS', 'txMByteS']
     	}
@@ -75,12 +85,9 @@ def total_bandwidth(config):
 	        'token': config['api_key'],
 	        'start' : config['start'],
 	        'end': config['end'],
-	        'filter': json.dumps(filter)
+	        'filter': json.dumps(filters)
 	    })
-	bandwidth_dic = calculate_bandwidth(json.loads(api_response.text))
-
-
-
+	return json.loads(api_response.text)
 
 
 config = read_config()
@@ -88,8 +95,10 @@ config = read_config()
 	
 devices = available_devices(config)
 metrics = available_metrics(config)
+bandwidth = bandwidth_response(config)
 
 device_names = get_devices(devices)
 adapters = get_network_interfaces(metrics)
+total_bandwidth = calculate_bandwidth(bandwidth)
 
 
