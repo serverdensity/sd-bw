@@ -1,16 +1,6 @@
 import requests
 import json
-
-
-config = {
-	'email': 'h@email.com',
-	'start': '2014-11-10T10:00:00Z', # set this in the config file
-	'end': '2014-11-10T18:00:00Z', # set in config file
-	'current_device': '5460a47c76d377952c4420b3',
-	'api_key': '5eefa2ed1f30d4f3d704100a591fbf73',
-	'devices': [],
-	'interfaces': [],
-}
+from collections import namedtuple
 
 # need to figure out error handling. 
 
@@ -93,6 +83,7 @@ def total_bandwidth(config):
 
 
 
+config = read_config()
 
 	
 devices = available_devices(config)
