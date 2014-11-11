@@ -20,6 +20,8 @@ how do I modify the config in a good way? Do I want to check several devices at 
 
 sdbandwidth -d idhere > uses that device instead of the one in the config file
 
+sdbandwidth -t start end > uses that time instead of the one in the config file. 
+
 sdbandwidth -ad > all devices
 
 sdbandwidth -n adapter > uses that network adapter instead of the one set in the config file. 
