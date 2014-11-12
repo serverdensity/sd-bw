@@ -8,7 +8,7 @@ import requests
 # need to figure out error handling. 
 
 BASE_URL = 'https://api.serverdensity.io'
-CONFIG_PATH = '~/config.json'
+CONFIG_PATH = '~/.config.json'
 
 
 def parse_response(response):
@@ -93,7 +93,7 @@ def get_devices(devices):
 def read_config():
 	config = {}
 	try:
-		with open('config.json', 'r') as f:
+		with open(os.path.expanduser(CONFIG_PATH), 'r') as f:
 			config = json.load(f)
 	except IOError:
 		print "Error: There is no config.json file"
@@ -103,7 +103,7 @@ def modify_config(keydic):
 	config = read_config()
 	for key, val in keydic.iteritems():
 		config[key] = val
-	with open('config.json', 'w') as fp:
+	with open(os.path.expanduser(CONFIG_PATH), 'w') as fp:
 		json.dump(config, fp)
 
 def calculate_bandwidth(trafficdic):
