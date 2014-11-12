@@ -1,6 +1,7 @@
 import json
 from collections import namedtuple
 from urlparse import urljoin
+import os.path
 
 import requests
 
@@ -16,9 +17,8 @@ def parse_response(response):
 		data = json.loads(response.text)
 	except ValueError:
 		data = {}
-
 	try:
-		if response.status == 200:
+		if response.status_code == 200:
 			return data
 		elif not data:
 			data['message'] = 'Dictionary is empty'
@@ -33,7 +33,8 @@ def get_jsondata(urlpath, payload):
 	return parse_response(response)
 
 
-def available_metrics(config):
+def available_metrics():
+	config = read_config()	
 	payload = {
 		        'token': config['api_key'],
 		        'start' : config['start'],
@@ -44,8 +45,9 @@ def available_metrics(config):
 
 	return api_response
 
-def bandwidth_response(config):
+def bandwidth_response():
 	"""Get total_bandwidth for current device and current interface"""
+	config = read_config()
 
 	filters = {
     'networkTraffic': {
@@ -64,7 +66,8 @@ def bandwidth_response(config):
 
 	return api_response
 
-def available_devices(config):
+def available_devices():
+	config = read_config()
 	payload = {'token': config['api_key']}
 
 	api_response = get_jsondata('/inventory/devices', payload)
@@ -84,11 +87,25 @@ def get_network_interfaces(metrics):
 
 	return adapters
 
-def get_devices(devices):
+def get_groups(device_response):
+	groupdic = {}
+	for device in device_response:
+		devicedic[device['group']] = { device['name']: device['_id']}
+	return groupdic
+
+def get_devices(device_response):
 	devicedic = {}
-	for device in devices:
+	for device in device_response:
 		devicedic[device['name']] =  device['_id']
 	return devicedic
+
+def present_devices():
+	devices = available_devices()
+	devicedic = get_devices(devices)
+
+	for name, _id in devicedic.iteritems():
+		print "Device: {0} 		ID: {1}".format(name, _id)
+
 
 def read_config():
 	config = {}
@@ -119,19 +136,14 @@ def calculate_bandwidth(trafficdic):
 
 	return Bandwidth(rxgb, txgb)
 
+if __name__ == '__main__':
+	config = read_config()
+	devices = available_devices()
+	metrics = available_metrics()
+	bandwidth = bandwidth_response()
 
-
-
-
-config = read_config()
-
-	
-devices = available_devices(config)
-metrics = available_metrics(config)
-bandwidth = bandwidth_response(config)
-
-device_names = get_devices(devices)
-adapters = get_network_interfaces(metrics)
-total_bandwidth = calculate_bandwidth(bandwidth)
+	device_names = get_devices(devices)
+	adapters = get_network_interfaces(metrics)
+	total_bandwidth = calculate_bandwidth(bandwidth)
 
 
