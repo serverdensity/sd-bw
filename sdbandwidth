@@ -2,22 +2,22 @@
 
 """CLI for checking bandwidth at Server Density.
 
-Usage:
-	sdbandwidth devices
-	sdbandwidth interfaces
-	sdbandwidth bandwidth [(-i <name>) (-d <id>) (-t [(<start> <end>)])]
+Usage: 
+	sdbandwidth bandwidth [(-d <id>) (-t [(<start> <end>)])]
+	sdbandwidth bandwidth group <name>
+	sdbandwidth bandwidth device <name>
 	sdbandwidth emailme <email>
+	sdbandwidth groups (update | view)
+	sdbandwidth devices (update | view)
 	sdbandwidth config
 	sdbandwidth -h | --help
 	sdbandwidth -v | --version
 
-	
 Options:
-	-d <id>				Use this device instead of current device in config
-	-i <name>			Use this network interface instead of the current in config
-	-t <start> <end> 	Use this time instead of time in config: YYYY-MM-DDTHH:MM:SSZ
-	-v, --version    	Show version
-	-h, --help 			Show help
+	-d <id>  		Use this device instead of current device in config
+	-t <start> <end>  	Use this time instead of time in config: YYYY-MM-DDTHH:MM:SSZ
+	-v, --version  		Show version
+	-h, --help  		Show help
 """
 
 import docopt 
