@@ -9,10 +9,52 @@ layout of the config file
     'end': 'end-date',
 	'current_device': 'onetuhoneuth',
     'current_interface': 'eth0',
-    'devices': [''],
-    'interfaces': [''], # this may need to be a dictionary. 
-    'type': 'rxMByteS'
+    'devices': {
+            'R2D2': {
+                '_id': 'device_id',
+                'interface': []
+                }
+            }
+    'groups': {
+        'myGroup': {
+            'R2D2': {
+                '_id': 'device_id',
+                'interface': []
+            }
+        }
+    } 
 }
+
+current device is like this
+{
+    'name': 'id'
+}
+
+I want it to look like this
+{
+    'name': {
+        'id': id
+        'interface': []
+    }
+}
+
+take from groups. find that in the api. 
+
+{
+    'coolgroup': {'device_name': {
+        '_id': 'idhere',
+        'interface': ['eth0', 'eth1'] 
+    }
+}
+
+## device bandwidt
+{
+    'eth0': t.rx
+    'lo': 
+}
+
+
+Either I have the config file in the site-packages or I have it in user folder. Having it in the user folder it becomes easier to edit. How do I move a file there directly. 
 
 API layout
 
