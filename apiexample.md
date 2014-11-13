@@ -61,3 +61,31 @@ bandwidth['networkTraffic']['tree']['eth0']['tree']['rxMByteS']
 'name'
 'unit'
 'data' <- list!
+
+
+# Inventory > Listing
+-------------------------
+Instead of having the response
+
+inventory[0]
+
+all parameters here
+
+I would like to be able to determine whether to list it in group or device name. So the api url would be. 
+
+GET /inventory/devices?token=<token>?type<type>
+
+where type is either 'group' or 'device'. The following response would be either
+
+## inventory['device_name'] 
+parameters
+
+## inventory['group_name']
+device1
+device2
+
+### inventory['group_name'][device1]
+parameters
+
+## Why isn't network interfaces part of the device parameters?! 
+It's a property of a device after all. 
