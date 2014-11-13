@@ -20,8 +20,38 @@ Options:
 	-h, --help  		Show help
 """
 
-import docopt 
+# view and update devices. delete interfaces. 
+
+import docopt
+import bandwidth
 
 if __name__ == '__main__':
-	arguments = docopt.docopt(__doc__, version='SDbandwidth client 0.1')
+	args = docopt.docopt(__doc__, version='SDbandwidth client 0.1')
 
+	if args['devices']:
+		if args['update']:
+			bandwidth.update_devices()
+		elif args['view']:
+			bandwidth.print_devices()
+	elif args['bandwidth']:
+		clargs = {}
+		if args['-t']:
+			clargs['start'] = args['<start>']
+			clargs['end'] = args['<end>']
+		if args['-d']:
+			clargs['id'] = args['<id>']
+		if args['group']:
+			bandwidth.print_bandwidth_group(args['<name>'], **clargs)
+		elif args['device']:
+			bandwidth.print_bandwidth_device(args['<name>'], **clargs)
+		# pass clargs into function. 
+	elif args['emailme']:
+		# check that email is correct. 
+		pass
+	elif args['config']:
+		pass
+	elif args['groups']:
+		if args['update']:
+			bandwidth.update_groups()
+		elif args['view']:
+			bandwidth.print_groups()
