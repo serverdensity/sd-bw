@@ -1,13 +1,13 @@
  # coding: utf-8
 
- import os
- from setuptools import setup, find_packages
- from pip.req import parse_requirements
+import os
+from setuptools import setup, find_packages
+from pip.req import parse_requirements
 
- CONFIG_PATH = '~/'
+CONFIG_PATH = '~/'
 
- install_reqs = parse_requirements('requirements.txt')
- reqs = [str(ir.req) for ir in install_reqs]
+install_reqs = parse_requirements('requirements.txt')
+reqs = [str(ir.req) for ir in install_reqs]
 
 setup(name='sd-bandwidth',
 	  version='0.1',
@@ -18,5 +18,5 @@ setup(name='sd-bandwidth',
 	  packages=find_packages(),
 	  scripts=['sdbandwidth'],
 	  install_requires=reqs,
-	  data_files=[(os.path.expanduser(CONFIG_PATH), ['sdbandwidth/.config.json'])]
+	  data_files=[(os.path.expanduser(CONFIG_PATH), ['.config.json'])]
 )
