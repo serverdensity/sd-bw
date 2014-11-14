@@ -16,7 +16,7 @@ setup(name='sd-bandwidth',
 	  author_email='jonathan@serverdensity.com',
 	  url='',
 	  packages=find_packages(),
-	  scripts=['sdbandwidth'],
+	  scripts=['sdbw'],
 	  install_requires=reqs,
 	  data_files=[(os.path.expanduser(CONFIG_PATH), ['.config.json'])]
 )
