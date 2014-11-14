@@ -42,19 +42,20 @@ if __name__ == '__main__':
 		elif args['view']:
 			bandwidth.print_groups()
 	elif args['bandwidth']:
-		clargs = {}
+		time_args = {}
 		if args['-t']:
-			clargs['start'] = args['<start>']
-			clargs['end'] = args['<end>']
-		if args['-d']:
-			clargs['id'] = args['<id>']
+			time_args['start'] = args['<start>']
+			time_args['end'] = args['<end>']
 		if args['group'] or args['-g']:
-			bandwidth.print_bandwidth_group(args['<name>'], **clargs)
+			bandwidth.print_bandwidth_group(args['<name>'], **time_args)
 		elif args['device'] or args['-d']:
-			bandwidth.print_bandwidth_device(args['<name>'], **clargs)
+			bandwidth.print_bandwidth_device(args['<name>'], **time_args)
 	elif args['emailme']:
 		# check that email is correct. 
 		print "Not yet implemented!"
-	elif args['config']:
-		pass
+	elif args['time']:
+		if args['set']:
+			bandwidth.set_time(args['start'], args['end'])
+		elif args['view']:
+			bandwidth.print_time()
 	
