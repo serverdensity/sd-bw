@@ -48,9 +48,9 @@ if __name__ == '__main__':
 			clargs['end'] = args['<end>']
 		if args['-d']:
 			clargs['id'] = args['<id>']
-		if args['group']:
+		if args['group'] or args['-g']:
 			bandwidth.print_bandwidth_group(args['<name>'], **clargs)
-		elif args['device']:
+		elif args['device'] or args['-d']:
 			bandwidth.print_bandwidth_device(args['<name>'], **clargs)
 	elif args['emailme']:
 		# check that email is correct. 
