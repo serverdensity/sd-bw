@@ -292,6 +292,17 @@ def auth_apikey(apikey):
 		print "Token verified."
 		modify_config({'api_key': apikey})
 
+def set_time(start, end):
+	config = read_config()
+	config.update({'start': start, 'end': end})
+	modify_config(config)
+	print "Time is updated."
+
+def print_time():
+	config = read_config()
+	print "Start time: {}\nEnd time {}".format(
+		config['start'], config['end'])
+
 
 if __name__ == '__main__':
 	config = read_config()
