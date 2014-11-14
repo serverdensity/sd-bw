@@ -194,7 +194,7 @@ def update_groups():
 	for device in device_response:
 		groupdic[device['group']] = { device['name']: {
 										'_id': device['_id'],
-										'interface': config['devices'][device['name']]['interfaces']
+										'interface': config['devices'][device['name']]['interface']
 										}
 									}
 
@@ -214,15 +214,15 @@ def print_groups():
 
 
 def print_devices():
-	devices = available_devices()
-	devicedic = get_devices(devices)
+	config = read_config()
+	try:
+		devicedic = config['devices']
 
-	for name, dic in devicedic.iteritems():
-		print """
-		Device: {0}
-		ID: {1}
-		Interfaces: {2}""".format(name, dic['_id'], ", ".join(dic['interfaces']))
-
+		for name, dic in devicedic.iteritems():
+			print "Device: {0}\nID: {1}\nInterfaces: {2}\n".format(
+				name, dic['_id'], ", ".join(dic['interface']))
+	except KeyError as e:
+		sys.exit('Error: There are no devices')
 
 def update_devices():
 	response = available_devices()
@@ -232,7 +232,7 @@ def update_devices():
 		config['current_device'] = dic['_id']
 		response = bandwidth_response(config)
 		interfaces = get_interfaces(response)
-		devices[name].update({'interfaces': interfaces})
+		devices[name].update({'interface': interfaces})
 	config['devices'] = devices
 	modify_config(config)
 	print "Updated devices and saved it to config files."
