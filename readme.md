@@ -21,7 +21,7 @@
 ## Authentication
 ------------------
 
-The first time you use the application a authentication prompt will automatically show up. Input an API token and you'll be good to go. 
+The first time you use the application an authentication prompt will automatically show up. Input an API token and you'll be good to go. 
 
     You need an authentication token
     What is your token: 12345678aoeuidhtn
