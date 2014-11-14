@@ -3,12 +3,12 @@
 """CLI for checking bandwidth at Server Density.
 
 Usage: 
+	sdbandwidth groups (update | view)
+	sdbandwidth devices (update | view)
 	sdbandwidth bandwidth [(-d <id>) (-t [(<start> <end>)])]
 	sdbandwidth bandwidth group <name>
 	sdbandwidth bandwidth device <name>
 	sdbandwidth emailme <email>
-	sdbandwidth groups (update | view)
-	sdbandwidth devices (update | view)
 	sdbandwidth config
 	sdbandwidth -h | --help
 	sdbandwidth -v | --version
@@ -33,6 +33,11 @@ if __name__ == '__main__':
 			bandwidth.update_devices()
 		elif args['view']:
 			bandwidth.print_devices()
+	elif args['groups']:
+		if args['update']:
+			bandwidth.update_groups()
+		elif args['view']:
+			bandwidth.print_groups()
 	elif args['bandwidth']:
 		clargs = {}
 		if args['-t']:
@@ -44,14 +49,9 @@ if __name__ == '__main__':
 			bandwidth.print_bandwidth_group(args['<name>'], **clargs)
 		elif args['device']:
 			bandwidth.print_bandwidth_device(args['<name>'], **clargs)
-		# pass clargs into function. 
 	elif args['emailme']:
 		# check that email is correct. 
-		pass
+		print "Not yet implemented!"
 	elif args['config']:
 		pass
-	elif args['groups']:
-		if args['update']:
-			bandwidth.update_groups()
-		elif args['view']:
-			bandwidth.print_groups()
+	
