@@ -3,24 +3,26 @@
 """CLI for checking bandwidth at Server Density.
 
 Usage: 
-	sdbandwidth groups (update | view)
-	sdbandwidth devices (update | view)
-	sdbandwidth bandwidth [(-d <id>) (-t [(<start> <end>)])]
-	sdbandwidth bandwidth group <name>
-	sdbandwidth bandwidth device <name>
-	sdbandwidth emailme <email>
-	sdbandwidth config
-	sdbandwidth -h | --help
-	sdbandwidth -v | --version
+	sdbw groups (update | view)
+	sdbw devices (update | view)
+	sdbw bandwidth (group <name> | -g <name>) [(-t <start> <end>)]
+	sdbw bandwidth (device <name> | -d <id>) [(-t <start> <end>)]
+	sdbw time (set (<start> <end>) | view)
+	sdbw -h | --help
+	sdbw -v | --version
 
 Options:
-	-d <id>  		Use this device instead of current device in config
-	-t <start> <end>  	Use this time instead of time in config: YYYY-MM-DDTHH:MM:SSZ
+	-d <id>  		Use this device id to check bandwidth
+	-g <name>		Use this group name to check bandwidth
+	-t <start> <end>  	Use this time and update time in config: YYYY-MM-DDTHH:MM:SSZ
 	-v, --version  		Show version
 	-h, --help  		Show help
 """
 
 # view and update devices. delete interfaces. 
+
+# 	Future version
+# 	sdbandwidth emailme <email>
 
 import docopt
 import bandwidth
