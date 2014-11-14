@@ -127,6 +127,7 @@ def read_config():
 	try:
 		with open(os.path.expanduser(CONFIG_PATH), 'r') as f:
 			config = json.load(f)
+		if not config['apikey']
 	except IOError:
 		print "Error: There is no config.json file"
 	return config
@@ -140,7 +141,7 @@ def modify_config(keydic):
 	return config
 
 def sum_bandwidth(group_calc):
-	"""Helper to group calculation"""
+	"""Helper to calc_bandwidth_group"""
 	for interface, dic in group_calc.iteritems():
 		txgb = 0
 		rxgb = 0
@@ -180,11 +181,6 @@ def calc_bandwidth_device(devicename):
 		return device_bandwidth
 	except KeyError:
 		sys.exit("Error: {0} doesn't have any data for this period".format(devicename))
-
-
-
-
-
 
 
 ######### CLI API ########
@@ -278,6 +274,25 @@ def print_bandwidth_device(devicename, start=None, end=None):
 	for interface, bw in calc.iteritems():
 		print "{0} 	{1} 		{2} 	{3}".format('', interface, bw.rxgb, bw.txgb)
 
+def check_existing_apikey():
+	config = read_config()
+	if not config['apikey']:
+		print "You need an authentication token"
+		apikey = raw_input("What is your token: ")
+		auth_apikey(apikey)
+
+
+def auth_apikey(apikey):
+	payload = {
+		"token": apikey,
+		"fields": json.dumps(['name'])
+		}
+	data = get_jsondata('inventory/devices', payload)
+	if data:
+		print "Token verified."
+		modify_config({'api_key': apikey})
+	else:
+		sys.exit("This token doesn't work")
 
 
 if __name__ == '__main__':
