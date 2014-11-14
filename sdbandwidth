@@ -6,13 +6,13 @@ Usage:
 	sdbw groups (update | view)
 	sdbw devices (update | view)
 	sdbw bandwidth (group <name> | -g <name>) [(-t <start> <end>)]
-	sdbw bandwidth (device <name> | -d <id>) [(-t <start> <end>)]
+	sdbw bandwidth (device <name> | -d <name>) [(-t <start> <end>)]
 	sdbw time (set (<start> <end>) | view)
 	sdbw -h | --help
 	sdbw -v | --version
 
 Options:
-	-d <id>  		Use this device id to check bandwidth
+	-d <name>  		Use this device name to check bandwidth
 	-g <name>		Use this group name to check bandwidth
 	-t <start> <end>  	Use this time and update time in config: YYYY-MM-DDTHH:MM:SSZ
 	-v, --version  		Show version
