@@ -1,9 +1,8 @@
 {
 	"email": "h@email.com",
-	"start": "2014-11-10T10:00:00Z", 
-	"end": "2014-11-10T18:00:00Z", 
+	"start": "", 
+	"end": "", 
 	"current_device": "",
-	"current_interface": "",
 	"api_key": "",
 	"devices": {},
 	"groups": {}
