@@ -14,6 +14,7 @@ CONFIG_PATH = '~/.config.json'
 
 Bandwidth = namedtuple('Bandwidth', 'rxgb, txgb')
 
+####### API section #########
 
 def parse_response(response):
 	try:
@@ -74,6 +75,10 @@ def available_devices():
 	api_response = get_jsondata('/inventory/devices', payload)
 	return api_response
 
+####### API section ends ######
+
+###### Working with responses #######
+
 def get_network_interfaces(metrics):
 	"""Gives you a list of network adapters from available_metrics"""
 	network = {}
@@ -88,6 +93,101 @@ def get_network_interfaces(metrics):
 
 	return adapters
 
+def get_interfaces(bandwidth_response):
+	interfaces = bandwidth_response[0]['tree']
+	interfaces_list = [interface['name'] for interface in interfaces]
+	return interfaces_list
+
+
+def get_devices(device_response):
+	devicedic = {}
+	for device in device_response:
+		devicedic[device['name']] =  {'_id': device['_id']}
+	return devicedic
+
+
+def calc_bandwidth_interface(device_bandwidth):
+	"""Takes input from device_bandwidth, for all network interfaces."""
+	#NOTE: need to adjust this for several eth. 
+	# second list is the interface. for 
+	rxmblist = device_bandwidth[0]['data']
+	txmblist = device_bandwidth[1]['data']
+
+	# There two definitions though
+	# http://en.wikipedia.org/wiki/Gigabyte#Definition
+
+	rxgb = round(sum([value['y'] for value in rxmblist])/1024)
+	txgb = round(sum([value['y'] for value in txmblist])/1024)
+
+	return Bandwidth(rxgb, txgb)
+
+
+def read_config():
+	config = {}
+	try:
+		with open(os.path.expanduser(CONFIG_PATH), 'r') as f:
+			config = json.load(f)
+	except IOError:
+		print "Error: There is no config.json file"
+	return config
+
+def modify_config(keydic):
+	config = read_config()
+	for key, val in keydic.iteritems():
+		config[key] = val
+	with open(os.path.expanduser(CONFIG_PATH), 'w') as fp:
+		json.dump(config, fp)
+	return config
+
+def sum_bandwidth(group_calc):
+	"""Helper to group calculation"""
+	for interface, dic in group_calc.iteritems():
+		txgb = 0
+		rxgb = 0
+		for name, bw in dic.iteritems():
+			txgb =+ bw.txgb
+			rxgb =+ bw.rxgb
+		group_calc[interface]['total'] = Bandwidth(rxgb, txgb)
+	return group_calc
+
+def calc_bandwidth_group(groupname):
+	config = read_config()
+	group_calc = {}
+	try: 
+		if not config['groups']:
+			raise KeyError
+		group = config['groups'][groupname]
+		for devicename, devicedic in group.iteritems():
+			print "Fething data for {}...".format(devicename)
+			device = calc_bandwidth_device(devicename)
+			for interface, bw in device.iteritems():
+				group_calc.setdefault(interface, {}).update({devicename:bw})
+		calc_total = sum_bandwidth(group_calc)
+		return calc_total
+	except KeyError:
+		print "Error: Couldn't find the group '{0}'".format(groupname)
+
+
+def calc_bandwidth_device(devicename):
+	config = read_config()
+	config['current_device'] = config['devices'][devicename]['_id'] 
+	try: 
+		bandwidth_resp = bandwidth_response(config)
+		device_bandwidth = {}
+		for interface in bandwidth_resp[0]['tree']:
+			device_bandwidth[interface['name']] = calc_bandwidth_interface(
+									interface['tree'])
+		return device_bandwidth
+	except KeyError:
+		sys.exit("Error: {0} doesn't have any data for this period".format(devicename))
+
+
+
+
+
+
+
+######### CLI API ########
 
 def update_groups():
 	device_response = available_devices()
@@ -120,18 +220,6 @@ def print_groups():
 		print "\n"
 
 
-
-def get_devices(device_response):
-	devicedic = {}
-	for device in device_response:
-		devicedic[device['name']] =  {'_id': device['_id']}
-	return devicedic
-
-def get_interfaces(bandwidth_response):
-	interfaces = bandwidth_response[0]['tree']
-	interfaces_list = [interface['name'] for interface in interfaces]
-	return interfaces_list
-
 def print_devices():
 	devices = available_devices()
 	devicedic = get_devices(devices)
@@ -156,22 +244,7 @@ def update_devices():
 	modify_config(config)
 	print "Updated devices and saved it to config files."
 
-def read_config():
-	config = {}
-	try:
-		with open(os.path.expanduser(CONFIG_PATH), 'r') as f:
-			config = json.load(f)
-	except IOError:
-		print "Error: There is no config.json file"
-	return config
 
-def modify_config(keydic):
-	config = read_config()
-	for key, val in keydic.iteritems():
-		config[key] = val
-	with open(os.path.expanduser(CONFIG_PATH), 'w') as fp:
-		json.dump(config, fp)
-	return config
 
 def print_bandwidth_group(groupname, start=None, end=None):
 	if start:
@@ -193,32 +266,6 @@ def print_bandwidth_group(groupname, start=None, end=None):
 			group[interface]['total'].rxgb, 
 			group[interface]['total'].txgb)
 
-def sum_dict(group_calc):
-	for interface, dic in group_calc.iteritems():
-		txgb = 0
-		rxgb = 0
-		for name, bw in dic.iteritems():
-			txgb =+ bw.txgb
-			rxgb =+ bw.rxgb
-		group_calc[interface]['total'] = Bandwidth(rxgb, txgb)
-	return group_calc
-
-def calc_bandwidth_group(groupname):
-	config = read_config()
-	group_calc = {}
-	try: 
-		if not config['groups']:
-			raise KeyError
-		group = config['groups'][groupname]
-		for devicename, devicedic in group.iteritems():
-			print "Fething data for {}...".format(devicename)
-			device = calc_bandwidth_device(devicename)
-			for interface, bw in device.iteritems():
-				group_calc.setdefault(interface, {}).update({devicename:bw})
-		calc_total = sum_dict(group_calc)
-		return calc_total
-	except KeyError:
-		print "Error: Couldn't find the group '{0}'".format(groupname)
 
 def print_bandwidth_device(devicename, start=None, end=None):
 	config = read_config()
@@ -232,34 +279,6 @@ def print_bandwidth_device(devicename, start=None, end=None):
 		print "{0} 	{1} 		{2} 	{3}".format('', interface, bw.rxgb, bw.txgb)
 
 
-def calc_bandwidth_device(devicename):
-	config = read_config()
-	config['current_device'] = config['devices'][devicename]['_id'] 
-	try: 
-		bandwidth_resp = bandwidth_response(config)
-		device_bandwidth = {}
-		for interface in bandwidth_resp[0]['tree']:
-			device_bandwidth[interface['name']] = calc_bandwidth_interface(
-									interface['tree'])
-		return device_bandwidth
-	except KeyError:
-		sys.exit("Error: {0} doesn't have any data for this period".format(devicename))
-
-
-def calc_bandwidth_interface(device_bandwidth):
-	"""Takes input from device_bandwidth, for all network interfaces."""
-	#NOTE: need to adjust this for several eth. 
-	# second list is the interface. for 
-	rxmblist = device_bandwidth[0]['data']
-	txmblist = device_bandwidth[1]['data']
-
-	# There two definitions though
-	# http://en.wikipedia.org/wiki/Gigabyte#Definition
-
-	rxgb = round(sum([value['y'] for value in rxmblist])/1024)
-	txgb = round(sum([value['y'] for value in txmblist])/1024)
-
-	return Bandwidth(rxgb, txgb)
 
 if __name__ == '__main__':
 	config = read_config()
