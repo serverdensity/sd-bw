@@ -127,7 +127,6 @@ def read_config():
 	try:
 		with open(os.path.expanduser(CONFIG_PATH), 'r') as f:
 			config = json.load(f)
-		if not config['apikey']
 	except IOError:
 		print "Error: There is no config.json file"
 	return config
@@ -276,7 +275,7 @@ def print_bandwidth_device(devicename, start=None, end=None):
 
 def check_existing_apikey():
 	config = read_config()
-	if not config['apikey']:
+	if not config['api_key']:
 		print "You need an authentication token"
 		apikey = raw_input("What is your token: ")
 		auth_apikey(apikey)
