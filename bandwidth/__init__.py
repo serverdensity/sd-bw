@@ -153,19 +153,17 @@ def sum_bandwidth(group_calc):
 def calc_bandwidth_group(groupname):
 	config = read_config()
 	group_calc = {}
-	try: 
-		if not config['groups']:
-			raise KeyError
-		group = config['groups'][groupname]
-		for devicename, devicedic in group.iteritems():
-			print "Fething data for {}...".format(devicename)
-			device = calc_bandwidth_device(devicename)
-			for interface, bw in device.iteritems():
-				group_calc.setdefault(interface, {}).update({devicename:bw})
-		calc_total = sum_bandwidth(group_calc)
-		return calc_total
-	except KeyError:
-		print "Error: Couldn't find the group '{0}'".format(groupname)
+	if not config['groups']:
+		raise KeyError
+	group = config['groups'][groupname]
+	for devicename, devicedic in group.iteritems():
+		print "Fething data for {}...".format(devicename)
+		device = calc_bandwidth_device(devicename)
+		for interface, bw in device.iteritems():
+			group_calc.setdefault(interface, {}).update({devicename:bw})
+	calc_total = sum_bandwidth(group_calc)
+	return calc_total
+	
 
 
 def calc_bandwidth_device(devicename):
@@ -246,20 +244,23 @@ def print_bandwidth_group(groupname, start=None, end=None):
 		modify_config({'start': start, 'end': end})
 
 	config = read_config()
-	group = config['groups'][groupname]
+	try:
+		group = config['groups'][groupname]
 
-	group = calc_bandwidth_group(groupname)
+		group = calc_bandwidth_group(groupname)
 
-	print "\n{0} 	{1} 	{2} 	{3}".format(
-		'Device', 'Interface', 'RxGB', 'TxGB')
-	for interface, devicedic in group.iteritems():
-		for devicename, bw in devicedic.iteritems():
-			if devicename != 'total':
-				print "{0} 	{1} 		{2} 	{3}".format(
-					devicename, interface, bw.rxgb, bw.txgb)
-		print "Total received: {0} gb\nTotal sent: 	{1} gb\n".format(
-			group[interface]['total'].rxgb, 
-			group[interface]['total'].txgb)
+		print "\n{0} 	{1} 	{2} 	{3}".format(
+			'Device', 'Interface', 'RxGB', 'TxGB')
+		for interface, devicedic in group.iteritems():
+			for devicename, bw in devicedic.iteritems():
+				if devicename != 'total':
+					print "{0} 	{1} 		{2} 	{3}".format(
+						devicename, interface, bw.rxgb, bw.txgb)
+			print "Total received: {0} gb\nTotal sent: 	{1} gb\n".format(
+				group[interface]['total'].rxgb, 
+				group[interface]['total'].txgb)
+	except KeyError:
+		print "Error: Couldn't find the group '{0}'".format(groupname)
 
 
 def print_bandwidth_device(devicename, start=None, end=None):
@@ -290,8 +291,6 @@ def auth_apikey(apikey):
 	if data:
 		print "Token verified."
 		modify_config({'api_key': apikey})
-	else:
-		sys.exit("This token doesn't work")
 
 
 if __name__ == '__main__':
