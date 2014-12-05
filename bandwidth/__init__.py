@@ -15,7 +15,7 @@ CONFIG_PATH = '~/.config.json'
 Bandwidth = namedtuple('Bandwidth', 'rxgb, txgb')
 
 
-####### API section #########
+# ###### API section #########
 
 
 def parse_response(response):
@@ -44,9 +44,9 @@ def get_jsondata(urlpath, payload):
 def available_metrics(config):
     payload = {
                 'token': config['api_key'],
-                'start' : config['start'],
+                'start': config['start'],
                 'end': config['end']
-            }
+                }
 
     api_response = get_jsondata('metrics/definitions/{0}'.format(config['current_device']), payload)
 
@@ -62,11 +62,11 @@ def bandwidth_response(config):
     }
 
     payload = {
-            'token': config['api_key'],
-            'start' : config['start'],
-            'end': config['end'],
-            'filter': json.dumps(filters)
-        }
+                'token': config['api_key'],
+                'start': config['start'],
+                'end': config['end'],
+                'filter': json.dumps(filters)
+                }
 
     api_response = get_jsondata('metrics/graphs/{0}'.format(config['current_device']), payload)
 
@@ -109,7 +109,7 @@ def get_interfaces(bandwidth_response):
 def get_devices(device_response):
     devicedic = {}
     for device in device_response:
-        devicedic[device['name']] =  {'_id': device['_id']}
+        devicedic[device['name']] = {'_id': device['_id']}
     return devicedic
 
 
