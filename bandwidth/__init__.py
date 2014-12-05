@@ -319,13 +319,12 @@ def set_time(start, end):
     config = read_config()
     config.update({'start': start, 'end': end})
     modify_config(config)
-    print "You are now using the current timeperiod."
-    print "Start time: {}".format(start)
-    print "End time: {}".format(end)
+    print_time()
 
 
 def print_time():
     config = read_config()
+    print "You are now using the current timeperiod."
     print "Start time: {}\nEnd time {}".format(
         config['start'], config['end'])
 
