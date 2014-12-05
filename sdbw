@@ -2,7 +2,7 @@
 
 """CLI for checking bandwidth at Server Density.
 
-Usage: 
+Usage:
 	sdbw groups (update | view)
 	sdbw devices (update | view)
 	sdbw bandwidth (group <name> | -g <name>) [(-t <start> <end>)]
@@ -19,7 +19,7 @@ Options:
 	-h, --help  		Show help
 """
 
-# view and update devices. delete interfaces. 
+# view and update devices. delete interfaces.
 
 # 	Future version
 # 	sdbandwidth emailme <email>
@@ -28,8 +28,10 @@ import docopt
 import bandwidth
 
 if __name__ == '__main__':
-	args = docopt.docopt(__doc__, version='SDbandwidth client 0.1')
+	args = docopt.docopt(__doc__, version='SDbandwidth client 0.11')
 	bandwidth.check_existing_apikey()
+	if not bandwidth.read_config()['start']:
+		bandwidth.update_current_time()
 
 	if args['devices']:
 		if args['update']:
@@ -51,11 +53,11 @@ if __name__ == '__main__':
 		elif args['device'] or args['-d']:
 			bandwidth.print_bandwidth_device(args['<name>'], **time_args)
 	elif args['emailme']:
-		# check that email is correct. 
+		# check that email is correct.
 		print "Not yet implemented!"
 	elif args['time']:
 		if args['set']:
 			bandwidth.set_time(args['start'], args['end'])
 		elif args['view']:
 			bandwidth.print_time()
-	
+
