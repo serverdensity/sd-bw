@@ -32,7 +32,7 @@ def parse_response(response):
         elif response.status != 200:
             raise Exception
     except Exception:
-        print 'Error: {0}'.format(data['message'])
+        sys.exit('Error: {0}'.format(data['message']))
         # exit to os.
 
 
