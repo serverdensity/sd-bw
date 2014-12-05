@@ -137,7 +137,7 @@ def read_config():
         with open(os.path.expanduser(CONFIG_PATH), 'r') as f:
             config = json.load(f)
     except IOError:
-        print "Error: There is no config.json file"
+        print "\nError: There is no config.json file"
     return config
 
 
@@ -216,7 +216,7 @@ def update_groups():
 def print_groups():
     config = read_config()
     if not config['groups']:
-        print "There are no groups"
+        print "There are no groups, try 'groups update' first"
     for groupname, groupdic in config['groups'].iteritems():
         print "Group: {}".format(groupname)
         for device, devicedic in groupdic.iteritems():
@@ -324,8 +324,8 @@ def set_time(start, end):
 
 def print_time():
     config = read_config()
-    print "You are now using the current timeperiod."
-    print "Start time: {}\nEnd time {}".format(
+    print "\nYou are now using the current timeperiod."
+    print "Start time: {}\nEnd time: {}".format(
         config['start'], config['end'])
 
 
