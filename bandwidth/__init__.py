@@ -1,4 +1,6 @@
 import json
+from datetime import datetime
+from datetime import timedelta
 from collections import namedtuple
 from urlparse import urljoin
 import os.path
@@ -290,6 +292,16 @@ def check_existing_apikey():
         print "You need an authentication token"
         apikey = raw_input("What is your token: ")
         auth_apikey(apikey)
+
+
+def update_current_time():
+    # Date format: YYYY-MM-DDTHH:MM:SSZ
+    end_time = datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ")
+    start_time = (
+        datetime.now() - timedelta(days=1)
+        ).strftime("%Y-%m-%dT%H:%M:%SZ")
+    config = read_config()
+    set_time(start_time, end_time)
 
 
 def auth_apikey(apikey):
