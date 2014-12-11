@@ -298,7 +298,7 @@ def update_current_time():
     # Date format: YYYY-MM-DDTHH:MM:SSZ
     end_time = datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ")
     start_time = (
-        datetime.now() - timedelta(days=1)
+        datetime.now() - timedelta(hours=1)
         ).strftime("%Y-%m-%dT%H:%M:%SZ")
     config = read_config()
     set_time(start_time, end_time)
