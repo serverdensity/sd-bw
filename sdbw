@@ -52,7 +52,7 @@ if __name__ == '__main__':
 			bandwidth.print_bandwidth_group(args['<name>'], **time_args)
 		elif args['device'] or args['-d']:
 			bandwidth.print_bandwidth_device(args['<name>'], **time_args)
-	elif args['emailme']:
+	elif args['email']:
 		# check that email is correct.
 		print "Not yet implemented!"
 	elif args['time']:

@@ -160,7 +160,6 @@ def sum_bandwidth(group_calc):
             txmb += bw.txmb
             rxmb += bw.rxmb
         group_calc[interface]['total'] = Bandwidth(rxmb, txmb)
-    import pdb; pdb.set_trace()
     return group_calc
 
 
