@@ -15,7 +15,7 @@ import requests
 BASE_URL = 'https://api.serverdensity.io'
 CONFIG_PATH = '~/.config.json'
 
-Bandwidth = namedtuple('Bandwidth', 'rxgb, txgb')
+Bandwidth = namedtuple('Bandwidth', 'rxmb, txmb')
 
 
 # ###### API section #########
@@ -122,14 +122,15 @@ def calc_bandwidth_interface(device_bandwidth):
     # second list is the interface. for
     rxmblist = device_bandwidth[0]['data']
     txmblist = device_bandwidth[1]['data']
+    import pdb; pdb.set_trace()
 
     # There two definitions though
     # http://en.wikipedia.org/wiki/Gigabyte#Definition
 
-    rxgb = round(sum([value['y'] for value in rxmblist])/1024)
-    txgb = round(sum([value['y'] for value in txmblist])/1024)
+    rxmb = sum([value['y'] for value in rxmblist])
+    txmb = sum([value['y'] for value in txmblist])
 
-    return Bandwidth(rxgb, txgb)
+    return Bandwidth(rxmb, txmb)
 
 
 def read_config():
@@ -154,12 +155,12 @@ def modify_config(keydic):
 def sum_bandwidth(group_calc):
     """Helper to calc_bandwidth_group"""
     for interface, dic in group_calc.iteritems():
-        txgb = 0
-        rxgb = 0
+        txmb = 0
+        rxmb = 0
         for name, bw in dic.iteritems():
-            txgb =+ bw.txgb
-            rxgb =+ bw.rxgb
-        group_calc[interface]['total'] = Bandwidth(rxgb, txgb)
+            txmb =+ bw.txmb
+            rxmb =+ bw.rxmb
+        group_calc[interface]['total'] = Bandwidth(rxmb, txmb)
     return group_calc
 
 
@@ -268,15 +269,15 @@ def print_bandwidth_group(groupname, start=None, end=None):
         group = calc_bandwidth_group(groupname)
 
         print "\n{0}     {1}     {2}     {3}".format(
-            'Device', 'Interface', 'RxGB', 'TxGB')
+            'Device', 'Interface', 'rxmb', 'txmb')
         for interface, devicedic in group.iteritems():
             for devicename, bw in devicedic.iteritems():
                 if devicename != 'total':
                     print "{0}     {1}         {2}     {3}".format(
-                        devicename, interface, bw.rxgb, bw.txgb)
+                        devicename, interface, bw.rxmb, bw.txmb)
             print "Total received: {0} gb\nTotal sent:     {1} gb\n".format(
-                group[interface]['total'].rxgb,
-                group[interface]['total'].txgb)
+                group[interface]['total'].rxmb,
+                group[interface]['total'].txmb)
     except KeyError:
         print "Error: Couldn't find the group '{0}'".format(groupname)
 
