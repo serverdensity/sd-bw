@@ -270,13 +270,16 @@ def print_bandwidth_group(groupname, start=None, end=None):
 
         group = calc_bandwidth_group(groupname)
 
-        print "\n{0}     {1}     {2}     {3}".format(
+        print "\n{0:25}{1:7}{2:>10}{3:>10}".format(
             'Device', 'Interface', 'rxmb', 'txmb')
         for interface, devicedic in group.iteritems():
             for devicename, bw in devicedic.iteritems():
                 if devicename != 'total':
-                    print "{0}     {1}         {2:.2f}     {3:.2f}".format(
-                        devicename, interface, bw.rxmb, bw.txmb)
+                    print "{0:25}{1:7}{2:{rtxwidth}{prec}}{3:{rtxwidth}{prec}}".format(
+                        devicename, interface, bw.rxmb, bw.txmb,
+                        rtxwidth=">12",
+                        prec=".2f"
+                    )
             print "Total received: {0:.2f} mb\nTotal sent:     {1:.2f} mb\n".format(
                 group[interface]['total'].rxmb,
                 group[interface]['total'].txmb
