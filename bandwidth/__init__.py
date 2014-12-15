@@ -120,16 +120,22 @@ def calc_bandwidth_interface(device_bandwidth):
     """Takes input from device_bandwidth, for all network interfaces."""
     # NOTE: need to adjust this for several eth.
     # second list is the interface. for
-    rxmblist = device_bandwidth[0]['data']
-    txmblist = device_bandwidth[1]['data']
+    rxmbslist = device_bandwidth[0]['data']
+    txmbslist = device_bandwidth[1]['data']
+    if rxmbslist[1]['x'] - rxmbslist[0]['x'] < 3600:
+        # Every datapoint represents one minute.
+        rxgb = sum([value['y']*60 for value in rxmbslist])/1000
+        txgb = sum([value['y']*60 for value in txmbslist])/1000
+    else:
+        rxgb = sum([value['y']*3600 for value in rxmbslist])/1000
+        txgb = sum([value['y']*3600 for value in txmbslist])/1000
 
     # There two definitions though
     # http://en.wikipedia.org/wiki/Gigabyte#Definition
 
-    rxmb = sum([value['y'] for value in rxmblist])
-    txmb = sum([value['y'] for value in txmblist])
 
-    return Bandwidth(rxmb, txmb)
+
+    return Bandwidth(rxgb, txgb)
 
 
 def read_config():
