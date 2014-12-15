@@ -122,7 +122,6 @@ def calc_bandwidth_interface(device_bandwidth):
     # second list is the interface. for
     rxmblist = device_bandwidth[0]['data']
     txmblist = device_bandwidth[1]['data']
-    import pdb; pdb.set_trace()
 
     # There two definitions though
     # http://en.wikipedia.org/wiki/Gigabyte#Definition
@@ -161,6 +160,7 @@ def sum_bandwidth(group_calc):
             txmb += bw.txmb
             rxmb += bw.rxmb
         group_calc[interface]['total'] = Bandwidth(rxmb, txmb)
+    import pdb; pdb.set_trace()
     return group_calc
 
 
@@ -259,6 +259,7 @@ def update_devices():
     modify_config(config)
     print "Updated devices and saved it to config files."
 
+# print_bandwidth_group('Web')
 
 def print_bandwidth_group(groupname, start=None, end=None):
     if start:
@@ -280,10 +281,18 @@ def print_bandwidth_group(groupname, start=None, end=None):
                         rtxwidth=">12",
                         prec=".2f"
                     )
-            print "Total received: {0:.2f} mb\nTotal sent:     {1:.2f} mb\n".format(
-                group[interface]['total'].rxmb,
-                group[interface]['total'].txmb
-            )
+            total = group[interface]['total']
+            if total.rxmb > 1000:
+                print "Total received: {:.2f} gb".format(total.rxmb/1000)
+            else:
+                print "Total recieved: {:.2f} mb".format(total.rxmb)
+            if total.txmb > 1000:
+                print "Total sent: {:{width}{prec} gb".format(
+                    total.txmb/1000, width=">5", prec=".2f")
+            else:
+                print "Total sent: {:{width}{prec}} mb".format(
+                    total.txmb, width=">5", prec=".2f")
+            print "\n"
     except KeyError:
         print "Error: Couldn't find the group '{0}'".format(groupname)
 
