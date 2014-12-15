@@ -28,7 +28,7 @@ import docopt
 import bandwidth
 
 if __name__ == '__main__':
-	args = docopt.docopt(__doc__, version='SDbandwidth client 0.12')
+	args = docopt.docopt(__doc__, version='SDbandwidth client 0.13')
 	bandwidth.check_existing_apikey()
 	if not bandwidth.read_config()['start']:
 		bandwidth.update_current_time()
