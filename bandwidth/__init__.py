@@ -182,15 +182,13 @@ def calc_bandwidth_group(groupname):
 def calc_bandwidth_device(devicename):
     config = read_config()
     config['current_device'] = config['devices'][devicename]['_id']
-    try:
-        bandwidth_resp = bandwidth_response(config)
-        device_bandwidth = {}
-        for interface in bandwidth_resp[0]['tree']:
-            device_bandwidth[interface['name']] = calc_bandwidth_interface(
-                                    interface['tree'])
-        return device_bandwidth
-    except KeyError:
-        sys.exit("Error: {0} doesn't have any data for this period".format(devicename))
+
+    bandwidth_resp = bandwidth_response(config)
+    device_bandwidth = {}
+    for interface in bandwidth_resp[0]['tree']:
+        device_bandwidth[interface['name']] = calc_bandwidth_interface(
+                                interface['tree'])
+    return device_bandwidth
 
 
 # ######## CLI API ########
@@ -285,13 +283,16 @@ def print_bandwidth_group(groupname, start=None, end=None):
 def print_bandwidth_device(devicename, start=None, end=None):
     config = read_config()
     # Note: Make time amends.
-    calc = calc_bandwidth_device(devicename)
-
-    print devicename
-    print "{0}     {1}     {2}     {3}".format(
-        '', 'Interface', 'RxGB', 'TxGB')
-    for interface, bw in calc.iteritems():
-        print "{0}     {1}         {2}     {3}".format('', interface, bw.rxgb, bw.txgb)
+    try:
+        calc = calc_bandwidth_device(devicename)
+        print devicename
+        print "{0}     {1}     {2}     {3}".format(
+            '', 'Interface', 'RxMB', 'TxMB')
+        for interface, bw in calc.iteritems():
+            print "{0}     {1}         {2}     {3}".format(
+                '', interface, round(bw.rxmb, 2), round(bw.txmb, 2))
+    except KeyError:
+        sys.exit("Error: {0} doesn't have any data for this period".format(devicename))
 
 
 def check_existing_apikey():
