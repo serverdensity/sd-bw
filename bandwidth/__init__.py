@@ -158,8 +158,8 @@ def sum_bandwidth(group_calc):
         txmb = 0
         rxmb = 0
         for name, bw in dic.iteritems():
-            txmb =+ bw.txmb
-            rxmb =+ bw.rxmb
+            txmb += bw.txmb
+            rxmb += bw.rxmb
         group_calc[interface]['total'] = Bandwidth(rxmb, txmb)
     return group_calc
 
