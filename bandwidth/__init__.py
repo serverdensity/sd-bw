@@ -15,7 +15,7 @@ import requests
 BASE_URL = 'https://api.serverdensity.io'
 CONFIG_PATH = '~/.config.json'
 
-Bandwidth = namedtuple('Bandwidth', 'rxmb, txmb')
+Bandwidth = namedtuple('Bandwidth', 'rxgb, txgb')
 
 
 # ###### API section #########
@@ -154,12 +154,12 @@ def modify_config(keydic):
 def sum_bandwidth(group_calc):
     """Helper to calc_bandwidth_group"""
     for interface, dic in group_calc.iteritems():
-        txmb = 0
-        rxmb = 0
+        txgb = 0
+        rxgb = 0
         for name, bw in dic.iteritems():
-            txmb += bw.txmb
-            rxmb += bw.rxmb
-        group_calc[interface]['total'] = Bandwidth(rxmb, txmb)
+            txgb += bw.txgb
+            rxgb += bw.rxgb
+        group_calc[interface]['total'] = Bandwidth(rxgb, txgb)
     return group_calc
 
 
@@ -271,26 +271,26 @@ def print_bandwidth_group(groupname, start=None, end=None):
         group = calc_bandwidth_group(groupname)
 
         print "\n{0:25}{1:7}{2:>10}{3:>10}".format(
-            'Device', 'Interface', 'rxmb', 'txmb')
+            'Device', 'Interface', 'RxGB', 'TxGB')
         for interface, devicedic in group.iteritems():
             for devicename, bw in devicedic.iteritems():
                 if devicename != 'total':
                     print "{0:25}{1:7}{2:{rtxwidth}{prec}}{3:{rtxwidth}{prec}}".format(
-                        devicename, interface, bw.rxmb, bw.txmb,
+                        devicename, interface, bw.rxgb, bw.txgb,
                         rtxwidth=">12",
                         prec=".2f"
                     )
             total = group[interface]['total']
-            if total.rxmb > 1000:
-                print "Total received: {:.2f} gb".format(total.rxmb/1000)
+            if total.rxgb > 1000:
+                print "Total received: {:.2f} tb".format(total.rxgb/1000)
             else:
-                print "Total recieved: {:.2f} mb".format(total.rxmb)
-            if total.txmb > 1000:
-                print "Total sent: {:{width}{prec} gb".format(
-                    total.txmb/1000, width=">5", prec=".2f")
+                print "Total recieved: {:.2f} gb".format(total.rxgb)
+            if total.txgb > 1000:
+                print "Total sent: {:{width}{prec}} tb".format(
+                    total.txgb/1000, width=">5", prec=".2f")
             else:
-                print "Total sent: {:{width}{prec}} mb".format(
-                    total.txmb, width=">5", prec=".2f")
+                print "Total sent: {:{width}{prec}} gb".format(
+                    total.txgb, width=">5", prec=".2f")
             print "\n"
     except KeyError:
         print "Error: Couldn't find the group '{0}'".format(groupname)
@@ -303,10 +303,10 @@ def print_bandwidth_device(devicename, start=None, end=None):
         calc = calc_bandwidth_device(devicename)
         print devicename
         print "{0:5}{1:5}{2:>10}{3:>10}".format(
-            '', 'Interface', 'RxMB', 'TxMB')
+            '', 'Interface', 'RxGB', 'TxGB')
         for interface, bw in calc.iteritems():
             print "{0:5}{1:5}{2:>14}{3:>10}".format(
-                '', interface, round(bw.rxmb, 2), round(bw.txmb, 2))
+                '', interface, round(bw.rxgb, 2), round(bw.txgb, 2))
     except KeyError:
         sys.exit("Error: {0} doesn't have any data for this period".format(devicename))
 
