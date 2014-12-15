@@ -291,10 +291,10 @@ def print_bandwidth_device(devicename, start=None, end=None):
     try:
         calc = calc_bandwidth_device(devicename)
         print devicename
-        print "{0}     {1}     {2}     {3}".format(
+        print "{0:5}{1:5}{2:>10}{3:>10}".format(
             '', 'Interface', 'RxMB', 'TxMB')
         for interface, bw in calc.iteritems():
-            print "{0}     {1}         {2}     {3}".format(
+            print "{0:5}{1:5}{2:>14}{3:>10}".format(
                 '', interface, round(bw.rxmb, 2), round(bw.txmb, 2))
     except KeyError:
         sys.exit("Error: {0} doesn't have any data for this period".format(devicename))
