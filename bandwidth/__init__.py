@@ -2,6 +2,7 @@ import json
 from datetime import datetime
 from datetime import timedelta
 from collections import namedtuple
+import collections
 from urlparse import urljoin
 import os.path
 import sys
@@ -203,10 +204,12 @@ def update_groups():
 
     groupdic = {}
     for device in device_response:
-        groupdic[device['group']] = {device['name']: {
-                                     '_id': device['_id'],
-                                     'interface': config['devices'][device['name']]['interface']
-                                     }}
+        groupdic.setdefault(device['group'], {})
+        groupdic[device['group']].update({
+            device['name']: {
+                '_id': device['_id']
+            }
+        })
 
     print "Updated groups and saved it to config files."
     config['groups'] = groupdic
@@ -230,8 +233,12 @@ def print_devices():
         devicedic = config['devices']
 
         for name, dic in devicedic.iteritems():
-            print "Device: {0}\nID: {1}\nInterfaces: {2}\n".format(
-                name, dic['_id'], ", ".join(dic['interface']))
+            print "Device: {0}\nID: {1}\n".format(
+                name, dic['_id'])
+
+        # for name, dic in devicedic.iteritems():
+        #     print "Device: {0}\nID: {1}\nInterfaces: {2}\n".format(
+        #         name, dic['_id'], ", ".join(dic['interface']))
     except KeyError as e:
         sys.exit('Error: There are no devices')
 
@@ -240,11 +247,11 @@ def update_devices():
     response = available_devices()
     devices = get_devices(response)
     config = read_config()
-    for name, dic in devices.iteritems():
-        config['current_device'] = dic['_id']
-        response = bandwidth_response(config)
-        interfaces = get_interfaces(response)
-        devices[name].update({'interface': interfaces})
+    # for name, dic in devices.iteritems():
+    #     config['current_device'] = dic['_id']
+    #     response = bandwidth_response(config)
+    #     interfaces = get_interfaces(response)
+    #     devices[name].update({'interface': interfaces})
     config['devices'] = devices
     modify_config(config)
     print "Updated devices and saved it to config files."
