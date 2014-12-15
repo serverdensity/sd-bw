@@ -54,7 +54,7 @@ if __name__ == '__main__':
 			bandwidth.print_bandwidth_device(args['<name>'], **time_args)
 	elif args['time']:
 		if args['set']:
-			bandwidth.set_time(args['start'], args['end'])
+			bandwidth.set_time(args['<start>'], args['<end>'])
 		elif args['view']:
 			bandwidth.print_time()
 	# elif args['email']:

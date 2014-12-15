@@ -6,6 +6,7 @@ import collections
 from urlparse import urljoin
 import os.path
 import sys
+import re
 
 import requests
 
@@ -348,6 +349,9 @@ def auth_apikey(apikey):
 
 def set_time(start, end):
     config = read_config()
+    m = re.compile(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z")
+    if not m.match(start) and not m.match(end):
+        sys.exit("This is not the right time format")
     config.update({'start': start, 'end': end})
     modify_config(config)
     print_time()
