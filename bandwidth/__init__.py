@@ -275,11 +275,11 @@ def print_bandwidth_group(groupname, start=None, end=None):
         for interface, devicedic in group.iteritems():
             for devicename, bw in devicedic.iteritems():
                 if devicename != 'total':
-                    print "{0}     {1}         {2}     {3}".format(
-                        devicename, interface, round(bw.rxmb, 2), round(bw.txmb, 2))
-            print "Total received: {0} mb\nTotal sent:     {1} mb\n".format(
-                round(group[interface]['total'].rxmb),
-                round(group[interface]['total'].txmb)
+                    print "{0}     {1}         {2:.2f}     {3:.2f}".format(
+                        devicename, interface, bw.rxmb, bw.txmb)
+            print "Total received: {0:.2f} mb\nTotal sent:     {1:.2f} mb\n".format(
+                group[interface]['total'].rxmb,
+                group[interface]['total'].txmb
             )
     except KeyError:
         print "Error: Couldn't find the group '{0}'".format(groupname)
