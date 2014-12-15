@@ -11,7 +11,7 @@ reqs = [str(ir.req) for ir in install_reqs]
 
 setup(name='sd-bandwidth',
       packages=['bandwidth'],
-      version='0.13',
+      version='0.14',
       description='Command line interface to get bandwidth for a device and interface',
       author='Jonathan Sundqvist',
       author_email='jonathan@serverdensity.com',
