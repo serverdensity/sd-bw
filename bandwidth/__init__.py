@@ -172,9 +172,13 @@ def calc_bandwidth_group(groupname):
     group = config['groups'][groupname]
     for devicename, devicedic in group.iteritems():
         print "Fething data for {}...".format(devicename)
-        device = calc_bandwidth_device(devicename)
-        for interface, bw in device.iteritems():
-            group_calc.setdefault(interface, {}).update({devicename:bw})
+        try:
+            device = calc_bandwidth_device(devicename)
+            for interface, bw in device.iteritems():
+                group_calc.setdefault(interface, {}).update({devicename:bw})
+        except KeyError:
+            print "{} has no data for this period, therefore excluding it.".format(
+                devicename)
     calc_total = sum_bandwidth(group_calc)
     return calc_total
 
