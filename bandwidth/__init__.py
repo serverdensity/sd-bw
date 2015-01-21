@@ -247,7 +247,7 @@ def print_devices():
               "Trying to update devices.")
         update_devices()
         print_devices()
-    for name, dic in devicedic.iteritems():
+    for name, dic in config['devices'].iteritems():
         print "Device: {0}\nID: {1}\n".format(
             name, dic['_id'])
 
