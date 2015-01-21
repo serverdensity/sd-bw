@@ -228,7 +228,11 @@ def update_groups():
 def print_groups():
     config = read_config()
     if not config['groups']:
-        print "There are no groups, try 'groups update' first"
+        print("Couldn't find any groups in the config,"
+              "Trying to update groups.")
+        update_groups()
+        print_groups()
+
     for groupname, groupdic in config['groups'].iteritems():
         print "Group: {}".format(groupname)
         for device, devicedic in groupdic.iteritems():
