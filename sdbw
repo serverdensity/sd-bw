@@ -17,6 +17,8 @@ Options:
     -t <start> <end>      Use this time and update time in config: YYYY-MM-DDTHH:MM:SSZ
     -v, --version          Show version
     -h, --help          Show help
+
+If a group or device name contains blank spaces use quotes to get it.
 """
 
 # view and update devices. delete interfaces.
