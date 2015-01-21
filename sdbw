@@ -5,8 +5,8 @@
 Usage:
 	sdbw groups (update | view)
 	sdbw devices (update | view)
-	sdbw bandwidth (group <name> | -g <name>) [(-t <start> <end>)]
-	sdbw bandwidth (device <name> | -d <name>) [(-t <start> <end>)]
+	sdbw usage (group <name> | -g <name>) [(-t <start> <end>)]
+	sdbw usage (device <name> | -d <name>) [(-t <start> <end>)]
 	sdbw time (set (<start> <end>) | view)
 	sdbw -h | --help
 	sdbw -v | --version
@@ -43,7 +43,7 @@ if __name__ == '__main__':
 			bandwidth.update_groups()
 		elif args['view']:
 			bandwidth.print_groups()
-	elif args['bandwidth']:
+	elif args['usage']:
 		time_args = {}
 		if args['-t']:
 			time_args['start'] = args['<start>']
