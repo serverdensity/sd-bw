@@ -242,18 +242,14 @@ def print_groups():
 
 def print_devices():
     config = read_config()
-    try:
-        devicedic = config['devices']
-
-        for name, dic in devicedic.iteritems():
-            print "Device: {0}\nID: {1}\n".format(
-                name, dic['_id'])
-
-        # for name, dic in devicedic.iteritems():
-        #     print "Device: {0}\nID: {1}\nInterfaces: {2}\n".format(
-        #         name, dic['_id'], ", ".join(dic['interface']))
-    except KeyError as e:
-        sys.exit('Error: There are no devices')
+    if not config['devices']:
+        print("Couldn't find any devices in config,"
+              "Trying to update devices.")
+        update_devices()
+        print_devices()
+    for name, dic in devicedic.iteritems():
+        print "Device: {0}\nID: {1}\n".format(
+            name, dic['_id'])
 
 
 def update_devices():
