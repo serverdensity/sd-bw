@@ -256,16 +256,10 @@ def update_devices():
     response = available_devices()
     devices = get_devices(response)
     config = read_config()
-    # for name, dic in devices.iteritems():
-    #     config['current_device'] = dic['_id']
-    #     response = bandwidth_response(config)
-    #     interfaces = get_interfaces(response)
-    #     devices[name].update({'interface': interfaces})
     config['devices'] = devices
     modify_config(config)
     print "Updated devices and saved it to config files."
 
-# print_bandwidth_group('Web')
 
 def print_bandwidth_group(groupname, start=None, end=None):
     if start:
