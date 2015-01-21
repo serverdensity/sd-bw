@@ -314,11 +314,13 @@ def print_bandwidth_device(devicename, start=None, end=None):
 
 def check_existing_apikey():
     config = read_config()
-    if not config['api_key']:
-        print "You need an authentication token"
-        apikey = raw_input("What is your token: ")
-        auth_apikey(apikey)
-
+    try:
+        if not config['api_key']:
+            print "You need an authentication token"
+            apikey = raw_input("What is your token: ")
+            auth_apikey(apikey)
+    except KeyError:
+        sys.exit("Could not find .config.json in home directory")
 
 def update_current_time():
     # Date format: YYYY-MM-DDTHH:MM:SSZ
