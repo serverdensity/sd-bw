@@ -12,8 +12,8 @@
     $ sdbw -h
     sdbw groups (update | view)
     sdbw devices (update | view)
-    sdbw bandwidth (group <name> | -g <name>) [(-t <start> <end>)]
-    sdbw bandwidth (device <name> | -d <name>) [(-t <start> <end>)]
+    sdbw usage (group <name> | -g <name>) [(-t <start> <end>)]
+    sdbw usage (device <name> | -d <name>) [(-t <start> <end>)]
     sdbw time (set (<start> <end>) | view)
     sdbw -h | --help
     sdbw -v | --version
@@ -34,7 +34,7 @@ The token is saved in a `.config.json` in your home directory.
 
 You can either set the time with the following command
     
-    sdbw time set YY-MM-MMTHH:MM:SSZ YY-MM-MMTHH:MM:SSZ 
+    sdbw time set YY-MM-DDTHH:MM:SSZ YY-MM-DDTHH:MM:SSZ 
 
 or using the flag `-t`. Either way, the time that was last input will be saved in the config file. 
 

@@ -1,9 +1,9 @@
 {
-	"email": "h@email.com",
-	"start": "", 
-	"end": "", 
-	"current_device": "",
-	"api_key": "",
-	"devices": {},
-	"groups": {}
+    "email": "h@email.com",
+    "start": "",
+    "end": "",
+    "current_device": "",
+    "api_key": "",
+    "devices": {},
+    "groups": {}
 }
