@@ -9,14 +9,26 @@
 
 ## Usage
 ---------
-    $ sdbw -h
-    sdbw groups (update | view)
-    sdbw devices (update | view)
-    sdbw usage (group <name> | -g <name>) [(-t <start> <end>)]
-    sdbw usage (device <name> | -d <name>) [(-t <start> <end>)]
-    sdbw time (set (<start> <end>) | view)
-    sdbw -h | --help
-    sdbw -v | --version
+```
+$ sdbw -h
+CLI for checking bandwidth at Server Density.
+
+Usage:
+        sdbw groups (update | view)
+        sdbw devices (update | view)
+        sdbw bandwidth (group <name> | -g <name>) [(-t <start> <end>)]
+        sdbw bandwidth (device <name> | -d <name>) [(-t <start> <end>)]
+        sdbw time (set (<start> <end>) | view)
+        sdbw -h | --help
+        sdbw -v | --version
+
+Options:
+        -d <name>               Use this device name to check bandwidth
+        -g <name>               Use this group name to check bandwidth
+        -t <start> <end>        Use this time and update time in config: YYYY-MM-DDTHH:MM:SSZ
+        -v, --version           Show version
+        -h, --help              Show help
+```
 
 ## Authentication
 ------------------
